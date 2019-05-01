@@ -12,7 +12,6 @@ using  namespace std;
 class NodoItem;
 class NodoUser;
 
-typedef pair<int, NodoItem*>  dato_item;
 typedef pair<int, NodoUser*>  dato_user;
 
 class  NodoItem {

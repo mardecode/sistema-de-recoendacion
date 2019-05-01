@@ -16,6 +16,7 @@ void  NodoItem::add_user(int rating,  int  id_user){
       //new_user = new NodoUser(id_user,this->index_users);
     }
     users[id_user] = make_pair( rating, new_user);
-  }
+}
+
 
 

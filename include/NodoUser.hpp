@@ -4,14 +4,18 @@
 #include <set>
 #include "math.h"
 #include <utility> 
+#include <vector>
+#include <list> 
 #include "NodoItem.hpp"
 
 using  namespace std;
 
 class NodoItem;
 class NodoUser;
+
+//ratin,Nodo*Item
 typedef pair<int, NodoItem*>  dato_item;
-typedef pair<int, NodoUser*>  dato_user;
+
 
 class  NodoUser{
   public:
@@ -21,5 +25,7 @@ class  NodoUser{
   
   NodoUser(int id,map< int, NodoItem*> * & index_items );
   void add_item(int rating,  int  id_item);
+
+  void knn();
 
 };

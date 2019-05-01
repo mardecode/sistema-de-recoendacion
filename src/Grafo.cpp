@@ -20,8 +20,9 @@ NodoUser * Grafo::findUser (int id){
     auto it = this->index_users.find(id);
     if (it!= index_users.end() ) 
         return it->second;
-    else
+    else{
         return 0;
+    }
 }
 
 NodoUser * Grafo::addUser(int id){
