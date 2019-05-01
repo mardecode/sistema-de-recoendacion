@@ -13,7 +13,7 @@ int iduser, idbook, timestamp ;
 float rating;
 
 
-FILE * ifs = fopen("/home/luisbch/Documentos/tbdGrafo/bin/ml-20m/ratings.csv","r");
+FILE * ifs = fopen("/home/luisbch/Documentos/sistema-de-recoendacion/bin/ml-20m/ratings.csv","r");
 int rows = 0;
 Grafo g;
 if (ifs) {
@@ -34,6 +34,9 @@ if (ifs) {
     }
     fclose(ifs);
     cout << "Se cargaron " << rows << "filas"<<endl;
+}
+else{
+  cout << "ERROR no se abrio el archivo" << endl;
 }
 
 
