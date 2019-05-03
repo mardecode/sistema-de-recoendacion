@@ -9,18 +9,16 @@
 #include "NodoUser.hpp"
 using  namespace std;
 
-class NodoItem;
 class NodoUser;
 
-typedef pair<int, NodoUser*>  dato_user;
 
 class  NodoItem {
     public:
       int id;
-      map<int,dato_user >  users;
-      map<int,NodoUser *> * index_users;
-      NodoItem(int,map<int,NodoUser *> * & index_users);
+      map<NodoUser *,float >  users;
+
+      NodoItem(int);
+      void add_user(int rating,  NodoUser* &  id_user);
       //~NodoItem();
-      void add_user(int rating,  int  id_user);
 }
 ;

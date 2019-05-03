@@ -30,7 +30,7 @@ NodoUser * Grafo::addUser(int id){
     if ( user ) 
         return user;
     else{
-        user = new NodoUser(id,this->p_index_items);
+        user = new NodoUser(id);
         this->index_users[id] = user;
         return user;
     }
@@ -41,7 +41,7 @@ NodoItem * Grafo::addItem(int id){
     if ( item ) 
         return item;
     else{
-        item = new NodoItem(id,this->p_index_users);
+        item = new NodoItem(id);
         this->index_items[id] = item;
         return item;
     }

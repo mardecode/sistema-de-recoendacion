@@ -1,20 +1,20 @@
 #include "Grafo.hpp"
-#include <stdlib.h> //ran
-#include <string>
 
-#include <vector> 
 #include <cstdio>
+
+#include <stdlib.h> //random
+#include <string>
+#include <vector> 
 #include <list>
-#include <chrono>
+#include <chrono> ///tiempo
 
 int main(){
 
 int iduser, idbook, timestamp ;
 float rating;
 
-
 //138493 users
-FILE * ifs = fopen("/home/luisbch/Documentos/sistema-de-recoendacion/bin/ml-20m/ratings.csv","r");
+FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/ratings.csv","r");
 
 //600 aprox users
 //FILE * ifs = fopen("/home/luisbch/Documentos/sistema-de-recoendacion/bin/ml-latest-small/ratings.csv","r");
@@ -32,8 +32,8 @@ if (ifs) {
         auto item = g.addItem(idbook);
         //Quiza se deba parallelizar , guardar to en un vector 
         // dividir el vector en 4 , y soltar 4 threads , cada uno realiza las inserciones
-        user->add_item(rating,idbook);
-        item->add_user(rating,iduser);
+        user->add_item(rating,item);  
+        item->add_user(rating,user);  
         rows++;
     }
     fclose(ifs);
@@ -46,8 +46,9 @@ else{
 
 
     auto start = chrono::steady_clock::now();
-    auto u = g.findUser(rand()%10000);
-    if(u) u->knn();
+
+    auto u = g.findUser(rand()%10000); //prueba
+    if(u) u->knn(10);
     else cout << "no user" << endl;
 
     auto fin = chrono::steady_clock::now();
