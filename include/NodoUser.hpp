@@ -12,9 +12,11 @@
 
 using  namespace std;
 
+
 class NodoItem;
 
 
+// typedef list< pair<float,NodoUser* > > k_vec; //k vecinos
 class  NodoUser{
   public:
     int id ;
@@ -24,8 +26,8 @@ class  NodoUser{
   
     NodoUser(int id);
     void add_item(float rating,  NodoItem * &);
-    void knn(int,int);
-    void recomendacion();
+    void knn(int,int,list< pair<float,NodoUser* > > &);
+    void recomendacion(list< pair<float,NodoUser* > > &, list<pair<int ,float> > &);
 
 
 };

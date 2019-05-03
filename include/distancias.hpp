@@ -11,6 +11,8 @@ typedef map<NodoUser*, list_ratings_xuser > common_users;
 typedef multimap<float , NodoUser* > users_ordenados;
 typedef multimap<float , NodoUser* ,greater<float> > users_ordenados_des;
 
+typedef list<pair<float,NodoUser*> > k_vec; //k vecinos
+
 int hola(){
     std::cout<<"FUNCIONO \n";
     return 1;
@@ -82,19 +84,21 @@ void coseno_soft(common_users cm_usrs, users_ordenados_des & usrs_ord){
 
 // ─── FUNCIONES ADICIONALES ──────────────────────────────────────────────────────
 
-void k_vecinos(users_ordenados & users, int & k){
+void k_vecinos(users_ordenados & users, int & k, k_vec &resp ){
     int i =0 ; 
     for(auto & user : users){
         if (i>= k) break;
         cout << user.second->id << endl;
+        resp.push_back(make_pair(user.first,user.second));
         i++;
     }
 }
 
-void k_vecinos(users_ordenados_des & users, int & k){
+void k_vecinos(users_ordenados_des & users, int & k,k_vec &resp ){
     int i =0 ; 
     for(auto & user : users){
         cout << user.second->id << endl;
+        resp.push_back(make_pair(user.first,user.second));
         if (i>= k) break;
         i++;
     }

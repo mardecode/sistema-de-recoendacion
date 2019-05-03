@@ -8,6 +8,8 @@
 #include <list>
 #include <chrono> ///tiempo
 
+typedef list<pair<float,NodoUser*> > k_vec; //k vecinos
+
 int main(){
 
 int iduser, idbook, timestamp ;
@@ -54,23 +56,19 @@ else{
     auto start = chrono::steady_clock::now();
 
     auto u = g.findUser(rand()%10000); //prueba
+    k_vec k_vecinos_cercanos; //k vecinos
+    list<pair<int ,float> > recomendacion;//
     cout<<u<<" user random \n";
-    if(u) u->knn(10,1);
+    if(u) {
+      u->knn(10,3,k_vecinos_cercanos);
+      u->recomendacion(k_vecinos_cercanos,recomendacion);
+      }
     else cout << "no user" << endl;
 
     auto fin = chrono::steady_clock::now();
     cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<endl;
 
-//*******************
-    start = chrono::steady_clock::now();
-
-    // auto u = g.findUser(rand()%10000); //prueba
-    cout<<u<<" user random \n";
-    if(u) u->knn(10,3);
-    else cout << "no user" << endl;
-
-    fin = chrono::steady_clock::now();
-    cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<endl;
+  
 
 
   return  0;
