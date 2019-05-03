@@ -6,7 +6,9 @@
 #include <utility> 
 #include <vector>
 #include <list> 
+
 #include "NodoItem.hpp"
+
 
 using  namespace std;
 
@@ -22,7 +24,8 @@ class  NodoUser{
   
     NodoUser(int id);
     void add_item(float rating,  NodoItem * &);
-    void knn(int);
+    void knn(int,int);
+    void recomendacion();
 
 
 };
