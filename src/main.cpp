@@ -62,23 +62,38 @@ struct HelloHandler : public Http::Handler {
                 auto start = chrono::steady_clock::now();
                 auto u = g.findUser(iduser); //prueba
                 k_vec k_vecinos_cercanos; //k vecinos
-                list<pair<int ,float> > recomendacion;//
-                cout<<u<<" user random \n";
+                list<pair<int,float> > recomendacion;//
+                
+                string salida = "{";
                 if(u) {
+                    salida += " 'user': [";
                     u->knn(k,distancia,k_vecinos_cercanos);
+                    for(auto & vecino : k_vecinos_cercanos){
+                        salida += "{ 'user': " + to_string(vecino.second->id) + ",";
+                        salida += "'distancia': " + to_string(vecino.first) + "} ," ; 
+                    }
+                    salida += "],'recomendacion': ["; 
                     u->recomendacion(k_vecinos_cercanos,recomendacion);
-                }
-                else cout << "no user" << endl;
+                    for(auto & rec : recomendacion){
+                        salida += "{'idItem':" + to_string(rec.first ) + ",";
+                        salida += " 'rating': " + to_string(rec.second) + "},";
+                    }
+                    salida+= "]";
+                    //salida += to_string(recomendacion)
 
+                }
+                else {
+                    cout << "no user" << endl;
+                    salida+=" 'error': 'No se encontro el usuario' ";
+                }
+
+                salida += "}";
                 auto fin = chrono::steady_clock::now();
                 cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<endl;
                 //END KNN procedure 
 
-
-            
-
-
-                writer.send(Http::Code::Ok, request.body(), MIME(Application, Json));
+                cout << "Salida: "<< salida << endl;        
+                writer.send(Http::Code::Ok, salida, MIME(Application, Json));
 
 
         }

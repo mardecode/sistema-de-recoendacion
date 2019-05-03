@@ -87,7 +87,7 @@ void coseno_soft(common_users cm_usrs, users_ordenados_des & usrs_ord){
 void k_vecinos(users_ordenados & users, int & k, k_vec &resp ){
     int i =0 ; 
     for(auto & user : users){
-        if (i>= k) break;
+        if (i> k) break;
         cout << user.second->id << endl;
         resp.push_back(make_pair(user.first,user.second));
         i++;
