@@ -108,8 +108,8 @@ int main(){
     float rating;
 
     //138493 users
-    //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/ratings.csv","r");
-    FILE * ifs = fopen("/home/luisbch/Documentos/sistema-de-recoendacion/bin/ml-latest-small/ratings.csv","r");
+    FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/ratings.csv","r");
+    // FILE * ifs = fopen("/home/luisbch/Documentos/sistema-de-recoendacion/bin/ml-latest-small/ratings.csv","r");
 
     //600 aprox users
     int rows = 0;
