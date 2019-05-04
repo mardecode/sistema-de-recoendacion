@@ -68,15 +68,22 @@ struct HelloHandler : public Http::Handler {
                 if(u) {
                     salida += " 'user': [";
                     u->knn(k,distancia,k_vecinos_cercanos);
+                    
+                    int c_vecinos = 0 ; 
                     for(auto & vecino : k_vecinos_cercanos){
                         salida += "{ 'user': " + to_string(vecino.second->id) + ",";
-                        salida += "'distancia': " + to_string(vecino.first) + "} ," ; 
+                        salida += "'distancia': " + to_string(vecino.first) + "}" ; 
+                        if (c_vecinos < k_vecinos_cercanos.size()-1 ) salida += ",";
+                        c_vecinos ++;
                     }
+
+                    c_vecinos = 0;
                     salida += "],'recomendacion': ["; 
                     u->recomendacion(k_vecinos_cercanos,recomendacion);
                     for(auto & rec : recomendacion){
                         salida += "{'idItem':" + to_string(rec.first ) + ",";
-                        salida += " 'rating': " + to_string(rec.second) + "},";
+                        salida += " 'rating': " + to_string(rec.second) + "}";
+                        if (c_vecinos < recomendacion.size() -1 ) salida += ",";
                     }
                     salida+= "]";
                     //salida += to_string(recomendacion)
