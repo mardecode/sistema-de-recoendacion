@@ -18,7 +18,7 @@ class  NodoItem {
       map<NodoUser *,float >  users;
 
       NodoItem(int);
-      void add_user(int rating,  NodoUser* &  id_user);
+      void add_user(float rating,  NodoUser* &  id_user);
       //~NodoItem();
 }
 ;

@@ -62,27 +62,53 @@
         
         <div class="container" id="app">
           <div v-if="datos">
+              Resuelto en : {{datos.time}} milisegundos
             <div v-if="datos.error">
               {{datos.error}}
             </div>
             <div v-else>
-                <table>
+              <div class="row">
+                <div class="col s6">
+                    <h4>Vecinos Cercanos</h4>
+                    <table>
+                        <thead>
+                          <tr>
+                              <!-- <th>Numero</th> -->
+                              <th>idUser</th>
+                              <th>Distancia</th>
+                          </tr>
+                        </thead>
+                
+                        <tbody>
+                          <tr v-for="user in datos.user">
+                            <!-- <td>{{index}}</td> -->
+                            <td>{{user.user}}</td>
+                            <td>{{user.distancia}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+                <div class="col s6">
+                  <h4>Items Recomendados</h4>
+                  <table>
                     <thead>
                       <tr>
-                          <th>Numero</th>
-                          <th>idUser</th>
-                          <th>Rating</th>
+                        <th>idItem</th>
+                        <th>Item</th>
+                        <th>Rating</th>
                       </tr>
                     </thead>
-            
                     <tbody>
-                      <tr v-for="(index,user) in datos.users">
-                        <td>index</td>
-                        <td>user.id</td>
-                        <td>user.rating</td>
+                      <tr v-for="item in datos.recomendacion">
+                        <td>{{item.idItem}}</td>
+                        <td>-</td>
+                        <td>{{item.rating}}</td>
                       </tr>
                     </tbody>
                   </table>
+                </div>
+              </div>
+                
             </div>
           </div>
           
@@ -103,7 +129,7 @@
       //var formu = form.;
       console.log(form.k.value);
       
-      fetch('http://localhost:9080/knn', {
+      fetch('http://localhost:9081/knn', {
         method: 'post',
         body: JSON.stringify({iduser: Number(form.iduser.value), distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
       }).then(function(response) {

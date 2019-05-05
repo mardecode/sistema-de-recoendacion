@@ -37,6 +37,7 @@ struct HelloHandler : public Http::Handler {
     else{
 
         if (request.resource() == "/knn" && request.method() == Http::Method::Post){
+        cout << "Entrada: "<< endl;        
             //writer.send(Http::Code::Ok, "Hello, World!");
                 //cout << "->"<< request.body() <<endl;
 
@@ -66,24 +67,25 @@ struct HelloHandler : public Http::Handler {
                 
                 string salida = "{";
                 if(u) {
-                    salida += " 'user': [";
+                    salida += " \"user\": [";
                     u->knn(k,distancia,k_vecinos_cercanos);
                     
                     int c_vecinos = 0 ; 
                     for(auto & vecino : k_vecinos_cercanos){
-                        salida += "{ 'user': " + to_string(vecino.second->id) + ",";
-                        salida += "'distancia': " + to_string(vecino.first) + "}" ; 
+                        salida += "{ \"user\": " + to_string(vecino.second->id) + ",";
+                        salida += "\"distancia\": " + to_string(vecino.first) + "}" ; 
                         if (c_vecinos < k_vecinos_cercanos.size()-1 ) salida += ",";
                         c_vecinos ++;
                     }
 
                     c_vecinos = 0;
-                    salida += "],'recomendacion': ["; 
+                    salida += "],\"recomendacion\": ["; 
                     u->recomendacion(k_vecinos_cercanos,recomendacion);
                     for(auto & rec : recomendacion){
-                        salida += "{'idItem':" + to_string(rec.first ) + ",";
-                        salida += " 'rating': " + to_string(rec.second) + "}";
+                        salida += "{\"idItem\":" + to_string(rec.first ) + ",";
+                        salida += " \"rating\": " + to_string(rec.second) + "}";
                         if (c_vecinos < recomendacion.size() -1 ) salida += ",";
+                        c_vecinos ++;
                     }
                     salida+= "]";
                     //salida += to_string(recomendacion)
@@ -91,12 +93,13 @@ struct HelloHandler : public Http::Handler {
                 }
                 else {
                     cout << "no user" << endl;
-                    salida+=" 'error': 'No se encontro el usuario' ";
+                    salida+=" \"error\": \"No se encontro el usuario\" ";
                 }
 
-                salida += "}";
                 auto fin = chrono::steady_clock::now();
-                cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<endl;
+                //cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<endl;
+                salida += ",\"time\":  " +  to_string(chrono::duration_cast<chrono::milliseconds>(fin-start).count()) ; 
+                salida += "}";
                 //END KNN procedure 
 
                 cout << "Salida: "<< salida << endl;        
@@ -115,7 +118,7 @@ int main(){
     float rating;
 
     //138493 users
-    FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/ratings.csv","r");
+    FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
     // FILE * ifs = fopen("/home/luisbch/Documentos/sistema-de-recoendacion/bin/ml-latest-small/ratings.csv","r");
 
     //600 aprox users
@@ -148,7 +151,7 @@ int main(){
 
 
     //Start Server
-    Http::listenAndServe<HelloHandler>("*:9080");
+    Http::listenAndServe<HelloHandler>("*:9081");
 
 
 // ───  KNN ──────────────────────────────────────────────────────────────────

@@ -19,7 +19,7 @@ void NodoUser::knn(int k,int dist, k_vec &k_vecinos_cercanos){
     for (auto & item : this->items ){
         float rating1 = item.second;
         for (auto & user: item.first->users){
-            int rating2 = user.second;         
+            float rating2 = user.second;         
             //Solo anade las pelicuas en comun, ejm
             //0x55896fb35010:  (3,3)    
             // 0x55896fb36ba0:  (5,4)    (5,5)    
