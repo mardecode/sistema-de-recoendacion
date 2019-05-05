@@ -20,87 +20,98 @@
             <a href="#" class="brand-logo center">Sistema de Recomendación</a>
         </div>
         </nav>
+        <!-- end barra -->
+
         
 
-        <!-- end barra -->
-        <div class="container">
+        <div class="row container" style="padding-top:10px">
+          <ul class="tabs">
+            <li class="tab col"><a class="active" href="#knn">K-NN</a></li>
+            <li class="tab col"><a href="#item">Item Score</a></li>
+          </ul>
+        </div>
+
+
+        <div id="knn">
+
+          <div class="container">
             
             <div class="row" style="padding-top:30px">
                 <form class="col" onsubmit="submitForm(event, this)">
                     <div class="row">
-                        <div class="input-field col l2">
-                            <input placeholder="Id user" id="first_name" name="iduser" class="validate" type="number" required>
-                            <label for="first_name">ID User</label>
-                        </div>
+                      <div class="input-field col l2">
+                        <input placeholder="Id user" id="first_name" name="iduser" class="validate" type="number" required>
+                        <label for="first_name">ID User</label>
+                      </div>
+                      
+                      <div class="input-field col l3">
+                        <select name="distancia" required>
+                          <option value="" disabled selected>Elija la distancia: </option>
+                          <option value="1">Manhattam</option>
+                          <option value="2">Euclidiana</option>
+                          <option value="3">Pearson</option>
+                          <option value="4">Soft Coseno</option>
+                        </select>
+                        <label>Seleccione distancia</label>
+                      </div>
     
-                        <div class="input-field col l3">
-                                <select name="distancia" required>
-                                  <option value="" disabled selected>Elija la distancia: </option>
-                                  <option value="1">Manhattam</option>
-                                  <option value="2">Euclidiana</option>
-                                  <option value="3">Pearson</option>
-                                  <option value="4">Soft Coseno</option>
-                                </select>
-                                <label>Seleccione distancia</label>
-                        </div>
-    
-                        <div class="input-field col l2">
+                      <div class="input-field col l2">
                                 <input placeholder="k" id="first_name"  class="validate" type="number" name="k" required>
                                 <label for="first_name">Num Vecinos</label>
+                              </div>
+                              
+                              <div class="input-field col l5">
+                                <button class="btn waves-effect waves-light col s3" type="submit" name="submit" >KNN
+                                  <i class="material-icons right">send</i>
+                                </button>
+                              </div>
+                              
+                            </div>
+                          </form>
                         </div>
-    
-                        <div class="input-field col l5">
-                            <button class="btn waves-effect waves-light col s3" type="submit" name="submit" >KNN
-                                    <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-    
-                    </div>
-                </form>
-            </div>
         </div>
         
         <div class="container" id="app">
-          <div v-if="datos">
-              Resuelto en : {{datos.time}} milisegundos
-            <div v-if="datos.error">
-              {{datos.error}}
+          <div v-if="datos_knn">
+            Resuelto en : {{datos_knn.time}} milisegundos
+            <div v-if="datos_knn.error">
+              {{datos_knn.error}}
             </div>
             <div v-else>
               <div class="row">
                 <div class="col s6">
-                    <h4>Vecinos Cercanos</h4>
-                    <table>
-                        <thead>
+                  <h4>Vecinos Cercanos</h4>
+                  <table>
+                    <thead>
                           <tr>
-                              <!-- <th>Numero</th> -->
-                              <th>idUser</th>
-                              <th>Distancia</th>
+                            <!-- <th>Numero</th> -->
+                            <th>idUser</th>
+                            <th>Distancia</th>
                           </tr>
                         </thead>
-                
+                        
                         <tbody>
-                          <tr v-for="user in datos.user">
+                          <tr v-for="user in datos_knn.user">
                             <!-- <td>{{index}}</td> -->
                             <td>{{user.user}}</td>
                             <td>{{user.distancia}}</td>
                           </tr>
                         </tbody>
                       </table>
-                </div>
-                <div class="col s6">
-                  <h4>Items Recomendados</h4>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>idItem</th>
-                        <th>Item</th>
-                        <th>Rating</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in datos.recomendacion">
-                        <td>{{item.idItem}}</td>
+                    </div>
+                    <div class="col s6">
+                      <h4>Items Recomendados</h4>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>idItem</th>
+                            <th>Item</th>
+                            <th>Rating</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="item in datos_knn.recomendacion">
+                            <td>{{item.idItem}}</td>
                         <td>-</td>
                         <td>{{item.rating}}</td>
                       </tr>
@@ -108,20 +119,26 @@
                   </table>
                 </div>
               </div>
-                
+              
             </div>
           </div>
           
         </div>
-
+      </div>
+        
+        <div id="item" class="container">
+          
+        </div>
+        
     <script>
 
-
-
-    
     document.addEventListener('DOMContentLoaded', function() {
       var elems = document.querySelectorAll('select');
       var instances = M.FormSelect.init(elems);
+      
+      var elem = document.querySelector('.tabs');
+      //var options = {}
+      var instance = M.Tabs.init(elem,{});
     });
 
     function submitForm(e, form){
@@ -137,7 +154,7 @@
       }).then(function(data) {
         //Success code goes here
         //alert('form submited')
-        app.datos = data; 
+        app.datos_knn = data; 
         console.log(data);
       }).catch(function(err) {
         //Failure
@@ -150,7 +167,8 @@
     var app = new Vue({
       el: '#app',
       data: {
-        datos: false
+        datos_knn: false,
+        datos_item: false,
       }
     });
 
