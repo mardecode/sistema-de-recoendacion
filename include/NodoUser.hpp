@@ -14,9 +14,11 @@ using  namespace std;
 
 
 class NodoItem;
-
+class NodoUser;
 
 // typedef list< pair<float,NodoUser* > > k_vec; //k vecinos
+//typedef list < tuple < user,  distancia , influencia , rating,  rating*influencia > 
+typedef list < tuple < NodoUser*,  float , float , float , float   >  > k_vec_rest;
 class  NodoUser{
   public:
     int id ;
@@ -26,8 +28,10 @@ class  NodoUser{
   
     NodoUser(int id);
     void add_item(float rating,  NodoItem * &);
-    void knn(int,int,list< pair<float,NodoUser* > > &);
+    void knn(int k,int dist,list< pair<float,NodoUser* > > &);
     void recomendacion(list< pair<float,NodoUser* > > &, list<pair<int ,float> > &);
 
+    void knn_restricto(int k, int dist, NodoItem  * & , list< pair<float,NodoUser* > > & );
+    float get_influencias(list< pair<float,NodoUser* > > & k_vecinos_cercanos,NodoItem * , k_vec_rest & );
 
 };

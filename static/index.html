@@ -30,10 +30,9 @@
             <li class="tab col"><a href="#item">Item Score</a></li>
           </ul>
         </div>
-
-
+    <div id="app">
         <div id="knn">
-
+          
           <div class="container">
             
             <div class="row" style="padding-top:30px">
@@ -54,63 +53,63 @@
                         </select>
                         <label>Seleccione distancia</label>
                       </div>
-    
+                      
                       <div class="input-field col l2">
-                                <input placeholder="k" id="first_name"  class="validate" type="number" name="k" required>
-                                <label for="first_name">Num Vecinos</label>
-                              </div>
-                              
-                              <div class="input-field col l5">
-                                <button class="btn waves-effect waves-light col s3" type="submit" name="submit" >KNN
-                                  <i class="material-icons right">send</i>
-                                </button>
-                              </div>
-                              
-                            </div>
-                          </form>
-                        </div>
-        </div>
-        
-        <div class="container" id="app">
-          <div v-if="datos_knn">
-            Resuelto en : {{datos_knn.time}} milisegundos
-            <div v-if="datos_knn.error">
-              {{datos_knn.error}}
-            </div>
-            <div v-else>
-              <div class="row">
-                <div class="col s6">
-                  <h4>Vecinos Cercanos</h4>
-                  <table>
-                    <thead>
-                          <tr>
-                            <!-- <th>Numero</th> -->
-                            <th>idUser</th>
-                            <th>Distancia</th>
-                          </tr>
-                        </thead>
-                        
-                        <tbody>
-                          <tr v-for="user in datos_knn.user">
-                            <!-- <td>{{index}}</td> -->
-                            <td>{{user.user}}</td>
-                            <td>{{user.distancia}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                        <input placeholder="k" id="first_name"  class="validate" type="number" name="k" required>
+                        <label for="first_name">Num Vecinos</label>
+                      </div>
+                      
+                      <div class="input-field col l5">
+                        <button class="btn waves-effect waves-light col s3" type="submit" name="submit" >KNN
+                          <i class="material-icons right">send</i>
+                        </button>
+                      </div>
+                      
                     </div>
-                    <div class="col s6">
-                      <h4>Items Recomendados</h4>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>idItem</th>
-                            <th>Item</th>
-                            <th>Rating</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="item in datos_knn.recomendacion">
+                  </form>
+                </div>
+              </div>
+        
+              <div class="container" >
+                <div v-if="datos_knn">
+                  Resuelto en : {{datos_knn.time}} milisegundos
+                  <div v-if="datos_knn.error">
+                    {{datos_knn.error}}
+                  </div>
+                  <div v-else>
+                    <div class="row">
+                      <div class="col s6">
+                        <h4>Vecinos Cercanos</h4>
+                        <table>
+                          <thead>
+                            <tr>
+                              <!-- <th>Numero</th> -->
+                              <th>idUser</th>
+                              <th>Distancia</th>
+                            </tr>
+                          </thead>
+                          
+                          <tbody>
+                            <tr v-for="user in datos_knn.user">
+                              <!-- <td>{{index}}</td> -->
+                              <td>{{user.user}}</td>
+                              <td>{{user.distancia}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col s6">
+                        <h4>Items Recomendados</h4>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>idItem</th>
+                              <th>Item</th>
+                              <th>Rating</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="item in datos_knn.recomendacion">
                             <td>{{item.idItem}}</td>
                         <td>-</td>
                         <td>{{item.rating}}</td>
@@ -125,12 +124,102 @@
           
         </div>
       </div>
+      <!-- End Tab KNN -->
+      
+      <!-- Begin TAB item -->
+      <div id="item" >
         
-        <div id="item" class="container">
+        <div class="container">
+          
+          <div class="row" style="padding-top:30px">
+              <form class="col" onsubmit="submitForm2(event, this)">
+                  <div class="row">
+                    <div class="input-field col l1">
+                      <input placeholder="Id user" id="first_name" name="iduser" class="validate" type="number" required>
+                      <label for="first_name">ID User</label>
+                    </div>
+                    
+                    <div class="input-field col l1">
+                      <input placeholder="Id Item" id="first_name" name="iditem" class="validate" type="number" required>
+                      <label for="first_name">ID User</label>
+                    </div>
+                    
+                    <div class="input-field col l3">
+                      <select name="distancia" required>
+                        <option value="" disabled>Elija la distancia: </option>
+                        <option value="1" disabled>Manhattam</option>
+                        <option value="2" disabled>Euclidiana</option>
+                        <option value="3" selected>Pearson</option>
+                        <option value="4" disabled>Soft Coseno</option>
+                      </select>
+                      <label>Seleccione distancia</label>
+                    </div>
+                    
+                    <div class="input-field col l2">
+                      <input placeholder="k" id="first_name"  class="validate" type="number" name="k" required>
+                      <label for="first_name">Num Vecinos</label>
+                    </div>
+                    
+                    <div class="input-field col l5">
+                      <button class="btn waves-effect waves-light col s3" type="submit" name="submit" >KNN
+                        <i class="material-icons right">send</i>
+                      </button>
+                    </div>
+                    
+                  </div>
+                </form>
+              </div>
+            </div>
+            
+            <div class="container">
+              <div v-if="datos_item">
+                Resuelto en : {{datos_knn.time}} milisegundos
+                
+                <h5>Rating calculado: {{datos_item.rating}}</h5>
+                <div v-if="datos_item.error">
+              {{datos_knn.error}}
+            </div>
+            <div v-else>
+              <div class="row">
+                <div class="col s12">
+                  <h4>Vecinos Cercanos</h4>
+                  <table>
+                    <thead>
+                      <tr>
+                        <!-- <th>Numero</th> -->
+                        <th>idUser</th>
+                        <th>Distancia</th>
+                            <th>Influencia</th>
+                            <th>Rating</th>
+                            <th>Rating * Inf </th>
+                            
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                          <tr v-for="user in datos_item.user">
+                            <!-- <td>{{index}}</td> -->
+                            <td>{{user.user}}</td>
+                            <td>{{user.distancia}}</td>
+                            <td>{{user.influencia}}</td>
+                            <td>{{user.rating}}</td>
+                            <td>{{user.ratingxinfluencia}}</td> 
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                 
+              </div>
+              
+            </div>
+          </div>
           
         </div>
-        
-    <script>
+      </div>
+      <!-- End Tab ITem -->
+      
+    </div>
+      <script>
 
     document.addEventListener('DOMContentLoaded', function() {
       var elems = document.querySelectorAll('select');
@@ -160,6 +249,29 @@
         //Failure
         //alert('Error')
         console.log("Error: ");
+        console.log(err);
+      });
+    }
+
+    function submitForm2(e, form){
+      e.preventDefault();
+      //var formu = form.;
+      console.log(form.k.value);
+      
+      fetch('http://localhost:9081/item', {
+        method: 'post',
+        body: JSON.stringify({iduser: Number(form.iduser.value), item:Number(form.iditem.value), distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data) {
+        //Success code goes here
+        //alert('form submited')
+        app.datos_item = data; 
+        console.log(data);
+      }).catch(function(err) {
+        //Failure
+        //alert('Error')
+        console.log("Error2: ");
         console.log(err);
       });
     }
