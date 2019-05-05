@@ -141,7 +141,7 @@
                     
                     <div class="input-field col l1">
                       <input placeholder="Id Item" id="first_name" name="iditem" class="validate" type="number" required>
-                      <label for="first_name">ID User</label>
+                      <label for="first_name">ID Item</label>
                     </div>
                     
                     <div class="input-field col l3">
@@ -173,7 +173,7 @@
             
             <div class="container">
               <div v-if="datos_item">
-                Resuelto en : {{datos_knn.time}} milisegundos
+                Resuelto en : {{datos_item.time}} milisegundos
                 
                 <h5>Rating calculado: {{datos_item.rating}}</h5>
                 <div v-if="datos_item.error">

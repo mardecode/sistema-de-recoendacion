@@ -163,7 +163,7 @@ float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem *
     float suma = 0 ;
     list <float> ratings; // Ratings dados, por los usuarios 
     for(auto & user : kvc){
-        suma+= user.first;  
+        suma+= (user.first + 1 ) / 2.0 ;  
         auto it = user.second->items.find(item);
         ratings.push_back(it->second);
     }
@@ -174,7 +174,7 @@ float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem *
     float total = 0;
     for(auto & user : kvc){
                             //Distancia/total 
-        float influencia = user.first/suma;
+        float influencia = ((user.first+1)/2.0) /suma;
         float rec_inf = influencia * (*it_ratings) ;
         total += rec_inf;
         k_vecinos.push_back(make_tuple(user.second,user.first,influencia,*it_ratings, rec_inf));
