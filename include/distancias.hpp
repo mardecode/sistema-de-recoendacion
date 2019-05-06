@@ -85,10 +85,10 @@ void coseno_soft(common_users cm_usrs, users_ordenados_des & usrs_ord){
     }
 }
 
-void coseno(common_users cm_usrs, users_ordenados_des & usrs_ord){
-    float xy, x2,y2;
+// void coseno(common_users cm_usrs, users_ordenados_des & usrs_ord){
+//     float xy, x2,y2;
 
-}
+// }
 
 // ─── FUNCIONES ADICIONALES ──────────────────────────────────────────────────────
 

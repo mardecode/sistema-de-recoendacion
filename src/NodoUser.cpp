@@ -135,7 +135,7 @@ void NodoUser::knn_restricto(int k, int dist, NodoItem  * & item_b , list< pair<
 }
 
 // ─── RECOMENDACION ──────────────────────────────────────────────────────────────
-void NodoUser::recomendacion(k_vec &kvc,map<NodoItem*,pair<float,int> > &  rec){ //K Vecinos mas Cercanos KVC
+void NodoUser::recomendacion(k_vec &kvc,map<NodoItem*,pair<float,int> > &  rec,float & umbral){ //K Vecinos mas Cercanos KVC
     // id movie, puntaje promedio
     // id_item,<ratign,numero>
 
@@ -178,6 +178,9 @@ void NodoUser::recomendacion(k_vec &kvc,map<NodoItem*,pair<float,int> > &  rec){
 float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem * item, k_vec_rest & k_vecinos ){
     float suma = 0 ;
     list <float> ratings; // Ratings dados, por los usuarios 
+    auto iterator = this->items.find(item);
+    if(iterator == this->items.end()){
+
     for(auto & user : kvc){
         suma+= (user.first + 1 ) / 2.0 ;  
         auto it = user.second->items.find(item);
@@ -197,5 +200,9 @@ float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem *
         it_ratings ++;
     }
     return total;
+    }
+    else{
+        return -1;
+    }
 
 }

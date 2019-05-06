@@ -61,7 +61,7 @@ struct HelloHandler : public Http::Handler {
                 auto u = g.findUser(iduser); //prueba
                 k_vec k_vecinos_cercanos; //k vecinos
                 // list<pair<int,float> > recomendacion;//
-                map<NodoItem*,pair<float,int> > recomendacion;
+                map<NodoItem*,pair<float,int>> recomendacion;
                 
                 string salida = "{";
                 if(u) {
@@ -134,22 +134,28 @@ struct HelloHandler : public Http::Handler {
                     u->knn_restricto(k,distancia,i,k_vecinos_cercanos);
                     k_vec_rest kvecinosrest;
                     float rating = u->get_influencias(k_vecinos_cercanos,i,kvecinosrest);
-                    // list < tuple < user,  distancia , influencia , rating,  rating*influencia > 
-                    salida += "\"rating\":" + to_string(rating) + ",";
-                    salida += " \"user\": [";
-                    int c_vecinos = 0 ; 
-                    for(auto & vecino : kvecinosrest){
-                        salida += "{ \"user\": " + to_string(get<0>(vecino)->id) + ",";
-                        salida += "\"distancia\": " + to_string(get<1>(vecino)) + "," ; 
-                        salida += "\"influencia\": " + to_string(get<2>(vecino)) + "," ; 
-                        salida += "\"rating\": " + to_string(get<3>(vecino)) + "," ; 
-                        salida += "\"ratingxinfluencia\": " + to_string(get<4>(vecino)) + "}" ; 
-                        if (c_vecinos < k_vecinos_cercanos.size()-1 ) salida += ",";
-                        c_vecinos ++;
-                    }
+                    if(rating != -1){
 
-                    c_vecinos = 0;
-                    salida += "]";
+                        // list < tuple < user,  distancia , influencia , rating,  rating*influencia > 
+                        salida += "\"rating\":" + to_string(rating) + ",";
+                        salida += " \"user\": [";
+                        int c_vecinos = 0 ; 
+                        for(auto & vecino : kvecinosrest){
+                            salida += "{ \"user\": " + to_string(get<0>(vecino)->id) + ",";
+                            salida += "\"distancia\": " + to_string(get<1>(vecino)) + "," ; 
+                            salida += "\"influencia\": " + to_string(get<2>(vecino)) + "," ; 
+                            salida += "\"rating\": " + to_string(get<3>(vecino)) + "," ; 
+                            salida += "\"ratingxinfluencia\": " + to_string(get<4>(vecino)) + "}" ; 
+                            if (c_vecinos < k_vecinos_cercanos.size()-1 ) salida += ",";
+                            c_vecinos ++;
+                        }
+
+                        c_vecinos = 0;
+                        salida += "]";
+                    }
+                    else{
+                        salida+=" \"error\": \"El usuario ya vio la pelicula\" ";
+                    } 
 
                 }
                 else {
@@ -179,7 +185,7 @@ int main(){
     auto start = chrono::steady_clock::now();
     //138493 users
     //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
-    FILE * ifs = fopen("dataset/ratings_100.csv","r");
+    FILE * ifs = fopen("dataset/ratings20.csv","r");
 
     //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
     //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
@@ -222,7 +228,7 @@ int main(){
     char title[200];
     char category[200];
     int rows_movies = 0;
-    FILE * ifm = fopen("dataset/movies_100.csv","r");
+    FILE * ifm = fopen("dataset/movies20.csv","r");
     if (ifm) {
         cout << "Abriendo Archivo Movies" << endl;
         cout << "Espere por favor" << endl;
