@@ -134,12 +134,12 @@ void NodoUser::knn_restricto(int k, int dist, NodoItem  * & item_b , list< pair<
 }
 
 // ─── RECOMENDACION ──────────────────────────────────────────────────────────────
-void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec){ //K Vecinos mas Cercanos KVC
+void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec,float &umbral){ //K Vecinos mas Cercanos KVC
     // id movie, puntaje promedio
     // id_item,<ratign,numero>
 
 
-    cout<<"RECOMENDACION"<<endl; 
+    // cout<<"RECOMENDACION"<<endl; 
     for(auto & usr: kvc){
         float mayor = 0;
         NodoItem * p_item;
@@ -169,9 +169,9 @@ void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec){ //K V
         }
     }
 
-    for (auto it = rec.begin();it != rec.end();++it){
-        cout << it->first << " => " << it->second.first <<","<<it->second.second << '\n';
-    }
+    // for (auto it = rec.begin();it != rec.end();++it){
+    //     cout << it->first << " => " << it->second.first <<","<<it->second.second << '\n';
+    // }
 }
 
 float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem * item, k_vec_rest & k_vecinos ){

@@ -54,8 +54,7 @@ struct HelloHandler : public Http::Handler {
                 int iduser = d["iduser"].GetInt();
                 int distancia = d["distancia"].GetInt();
                 int k = d["k"].GetInt();
-
-
+                float umbral = d["umbral"].GetFloat();
 
                 //KNN PROCEDURE
                 auto start = chrono::steady_clock::now();
@@ -79,7 +78,7 @@ struct HelloHandler : public Http::Handler {
 
                     c_vecinos = 0;
                     salida += "],\"recomendacion\": ["; 
-                    u->recomendacion(k_vecinos_cercanos,recomendacion);
+                    u->recomendacion(k_vecinos_cercanos,recomendacion,umbral);
                     for(auto & rec : recomendacion){
                         salida += "{\"idItem\":" + to_string(rec.first ) + ",";
                         salida += " \"rating\": " + to_string(rec.second.first/rec.second.second) + "}";
@@ -133,7 +132,6 @@ struct HelloHandler : public Http::Handler {
                 if(u && i) {
                     u->knn_restricto(k,distancia,i,k_vecinos_cercanos);
                     k_vec_rest kvecinosrest;
-                    cout << "wayaba "<< endl;
                     float rating = u->get_influencias(k_vecinos_cercanos,i,kvecinosrest);
                     // list < tuple < user,  distancia , influencia , rating,  rating*influencia > 
                     salida += "\"rating\":" + to_string(rating) + ",";
@@ -167,14 +165,6 @@ struct HelloHandler : public Http::Handler {
                 cout << "Salida: "<< salida << endl;        
                 writer.send(Http::Code::Ok, salida, MIME(Application, Json));
 
-
-
-
-
-
-
-
-
         }
     }
 
@@ -187,8 +177,8 @@ int main(){
     float rating;
     auto start = chrono::steady_clock::now();
     //138493 users
-    //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
-    FILE * ifs = fopen("dataset/ml-latest-small/ratings.csv","r");
+    FILE * ifs = fopen("dataset/bandas.csv","r");
+    //  FILE * ifs = fopen("dataset/ml-latest-small/ratings.csv","r");
 
     //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
     //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
