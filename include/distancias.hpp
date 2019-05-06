@@ -60,7 +60,9 @@ void pearson(common_users & cm_usrs, users_ordenados_des & usrs_ord){
         float down = sqrt(x2 -(pow(x,2)/n) ) * sqrt(y2 -(pow(y,2)/n) );
         float resp;
         if(down == 0) resp = 0;
-        else resp = up/down;    
+        else resp = up/down;
+        // if(resp > 1)    
+        // cout<<"resp "<<resp<<endl;
 
         usrs_ord.insert(make_pair(resp,p_usr));
     }
@@ -81,6 +83,11 @@ void coseno_soft(common_users cm_usrs, users_ordenados_des & usrs_ord){
 
         usrs_ord.insert(make_pair(resp,p_user));
     }
+}
+
+void coseno(common_users cm_usrs, users_ordenados_des & usrs_ord){
+    float xy, x2,y2;
+
 }
 
 // ─── FUNCIONES ADICIONALES ──────────────────────────────────────────────────────

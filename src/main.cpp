@@ -188,7 +188,8 @@ int main(){
 
     // ─── LECTURA DEL ARCHIVO ────────────────────────────────────────────────────────
     if (ifs) {
-        cout << "Archivo Abierto" << endl;
+        cout << "Abriendo archivo " << endl;
+        cout << "Espere con calma ... plis" << endl;
         char header[100]; 
         fscanf(ifs,"%s", header);
 

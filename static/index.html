@@ -45,7 +45,7 @@
                       </div>
 
                       <div class="input-field col l1">
-                          <input placeholder="Umbral" id="first_name" name="umbral" class="validate" type="number" required>
+                          <input placeholder="Umbral" id="first_name" name="umbral" class="validate" type="number" step="0.1" required>
                           <label for="first_name">Umbral</label>
                         </div>
                       
@@ -244,7 +244,7 @@
       
       fetch('http://localhost:9081/knn', {
         method: 'post',
-        body: JSON.stringify({iduser: Number(form.iduser.value), umbral:(form.umbral.value) , distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
+        body: JSON.stringify({iduser: Number(form.iduser.value), umbral:Number(form.umbral.value) , distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
       }).then(function(response) {
         return response.json();
       }).then(function(data) {

@@ -14,6 +14,7 @@ void  NodoUser::add_item(float rating,  NodoItem *  &new_item){
 
 // ─── KNN ────────────────────────────────────────────────────────────────────────
 void NodoUser::knn(int k,int dist, k_vec &k_vecinos_cercanos){
+
   map<NodoUser*, list_ratings_xuser > common_users; 
   
     for (auto & item : this->items ){
@@ -70,7 +71,7 @@ void NodoUser::knn(int k,int dist, k_vec &k_vecinos_cercanos){
  
 }
 
-
+// ─── KNN RESTRICTO ──────────────────────────────────────────────────────────────-------------------------------------------
 void NodoUser::knn_restricto(int k, int dist, NodoItem  * & item_b , list< pair<float,NodoUser* > > & k_vecinos_cercanos ){
     map<NodoUser*, list_ratings_xuser > common_users; 
   
@@ -135,10 +136,7 @@ void NodoUser::knn_restricto(int k, int dist, NodoItem  * & item_b , list< pair<
 
 // ─── RECOMENDACION ──────────────────────────────────────────────────────────────
 void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec,float &umbral){ //K Vecinos mas Cercanos KVC
-    // id movie, puntaje promedio
-    // id_item,<ratign,numero>
-
-
+    
     // cout<<"RECOMENDACION"<<endl; 
     for(auto & usr: kvc){
         float mayor = 0;
@@ -146,7 +144,7 @@ void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec,float &
         for(auto item : usr.second->items){
             auto it =  this->items.find(item.first); // encontrando movie* en mi 
             // poner variable de umbral
-            if(mayor<item.second and item.second > 3.5 and it == this->items.end() ){  // si es mayor el rating y si no existe en mis movies vistas
+            if(mayor<item.second and item.second > umbral and it == this->items.end() ){  // si es mayor el rating y si no existe en mis movies vistas
                 mayor = item.second;
                 p_item = item.first;
             }    
@@ -197,6 +195,4 @@ float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem *
     }
     return total;
 
-        //it->second; // rating
-    //return resp;
 }
