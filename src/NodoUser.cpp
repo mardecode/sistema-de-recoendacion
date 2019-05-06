@@ -36,14 +36,12 @@ void NodoUser::knn(int k,int dist, k_vec &k_vecinos_cercanos){
             }
         }
     }
-
     //Remove, Yo mismo
     auto it=common_users.find(this);
     common_users.erase (it);
     //FIN , OUT -> common_user :    Nodo* -> lista {  (r1,r2), (r1,r2), (r1,r2) , (r1,r2)  }
     //Distancia Manhattam
 
-    
 
 // ─── ESCOGIENDO LA DISTANCIA ────────────────────────────────────────────────────
     if(dist  == 1){
@@ -136,27 +134,44 @@ void NodoUser::knn_restricto(int k, int dist, NodoItem  * & item_b , list< pair<
 }
 
 // ─── RECOMENDACION ──────────────────────────────────────────────────────────────
-void NodoUser::recomendacion(k_vec &kvc,list<pair<int ,float> > & recomendacion){ //K Vecinos mas Cercanos KVC
+void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec){ //K Vecinos mas Cercanos KVC
     // id movie, puntaje promedio
+    // id_item,<ratign,numero>
+
+
     cout<<"RECOMENDACION"<<endl; 
     for(auto & usr: kvc){
         float mayor = 0;
         NodoItem * p_item;
         for(auto item : usr.second->items){
             auto it =  this->items.find(item.first); // encontrando movie* en mi 
-            if(mayor<item.second and it == this->items.end() ){  // si es mayor el rating y si no existe en mis movies vistas
+            // poner variable de umbral
+            if(mayor<item.second and item.second > 3.5 and it == this->items.end() ){  // si es mayor el rating y si no existe en mis movies vistas
                 mayor = item.second;
                 p_item = item.first;
+            }    
+        }
+        if (mayor != 0){ // por si un kvc compartio todas mis movies
+            cout<<"USER "<<usr.second->id<<"  - ";
+            cout<<"(id_item, puntaje) - ";
+            cout<< "("<<p_item->id<<","<<mayor<<")"<<endl;
+            // antigua implementacion
+            // recomendacion.push_back(make_pair(p_item->id,mayor));
+            // nueva implementacion
+            auto it = rec.find(p_item->id);
+            if(it!= rec.end()){
+                    it->second.first += mayor;
+                    it->second.second += 1; 
+            }
+            else{
+                rec[p_item->id] = make_pair(mayor,1);
             }
         }
-        cout<< "("<<mayor<<","<<p_item->id<<")"<<endl;
-        if (mayor != 0){ // por si un kvc compartio todas mis movies
-        recomendacion.push_back(make_pair(p_item->id,mayor));
-        }
-        
-
     }
 
+    for (auto it = rec.begin();it != rec.end();++it){
+        cout << it->first << " => " << it->second.first <<","<<it->second.second << '\n';
+    }
 }
 
 float NodoUser::get_influencias(list< pair<float,NodoUser* > > & kvc, NodoItem * item, k_vec_rest & k_vecinos ){

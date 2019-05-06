@@ -61,7 +61,8 @@ struct HelloHandler : public Http::Handler {
                 auto start = chrono::steady_clock::now();
                 auto u = g.findUser(iduser); //prueba
                 k_vec k_vecinos_cercanos; //k vecinos
-                list<pair<int,float> > recomendacion;//
+                // list<pair<int,float> > recomendacion;//
+                map<int,pair<float,int> > recomendacion;
                 
                 string salida = "{";
                 if(u) {
@@ -81,7 +82,7 @@ struct HelloHandler : public Http::Handler {
                     u->recomendacion(k_vecinos_cercanos,recomendacion);
                     for(auto & rec : recomendacion){
                         salida += "{\"idItem\":" + to_string(rec.first ) + ",";
-                        salida += " \"rating\": " + to_string(rec.second) + "}";
+                        salida += " \"rating\": " + to_string(rec.second.first/rec.second.second) + "}";
                         if (c_vecinos < recomendacion.size() -1 ) salida += ",";
                         c_vecinos ++;
                     }
