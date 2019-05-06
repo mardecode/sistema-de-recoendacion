@@ -29,7 +29,7 @@ class  NodoUser{
     NodoUser(int id);
     void add_item(float rating,  NodoItem * &);
     void knn(int,int,list< pair<float,NodoUser* > > &);
-    void recomendacion(list< pair<float,NodoUser* > > &, map<int,pair<float,int> > &,float &);
+    void recomendacion(list< pair<float,NodoUser* > > &, map<NodoItem*,pair<float,int> > &);
 
     void knn_restricto(int k, int dist, NodoItem  * & , list< pair<float,NodoUser* > > & );
     float get_influencias(list< pair<float,NodoUser* > > & k_vecinos_cercanos,NodoItem * , k_vec_rest & );

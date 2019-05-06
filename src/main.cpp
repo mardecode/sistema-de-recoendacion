@@ -61,7 +61,7 @@ struct HelloHandler : public Http::Handler {
                 auto u = g.findUser(iduser); //prueba
                 k_vec k_vecinos_cercanos; //k vecinos
                 // list<pair<int,float> > recomendacion;//
-                map<int,pair<float,int> > recomendacion;
+                map<NodoItem*,pair<float,int> > recomendacion;
                 
                 string salida = "{";
                 if(u) {
@@ -80,8 +80,9 @@ struct HelloHandler : public Http::Handler {
                     salida += "],\"recomendacion\": ["; 
                     u->recomendacion(k_vecinos_cercanos,recomendacion,umbral);
                     for(auto & rec : recomendacion){
-                        salida += "{\"idItem\":" + to_string(rec.first ) + ",";
-                        salida += " \"rating\": " + to_string(rec.second.first/rec.second.second) + "}";
+                        salida += "{\"idItem\":" + to_string(rec.first->id ) + ",";
+                        salida += " \"rating\": " + to_string(rec.second.first/rec.second.second) + ",";
+                        salida += " \"nombre\": \"" + rec.first->nombre + " \" } ";
                         if (c_vecinos < recomendacion.size() -1 ) salida += ",";
                         c_vecinos ++;
                     }
@@ -177,12 +178,12 @@ int main(){
     float rating;
     auto start = chrono::steady_clock::now();
     //138493 users
-    FILE * ifs = fopen("dataset/bandas.csv","r");
-    //  FILE * ifs = fopen("dataset/ml-latest-small/ratings.csv","r");
+    //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
+    FILE * ifs = fopen("dataset/ratings_100.csv","r");
 
     //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
     //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
-
+ 
     //600 aprox users
     int rows = 0;
 
@@ -211,8 +212,49 @@ int main(){
     cout << "ERROR no se abrio el archivo" << endl;
     }
     auto fin = chrono::steady_clock::now();
-    cout <<"Archivo Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<" milisegundos" <<endl;
+    cout <<"Archivo Ratings Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<" milisegundos" <<endl;
     // ─── FIN LECTURA DEL ARCHIVO CSV ────────────────────────────────────────────────
+
+    // *****************************************************
+    // ________________ INICIO LECTURA MOVIES  _____________
+    auto start_movies = chrono::steady_clock::now();
+    int idmovie;
+    char title[200];
+    char category[200];
+    int rows_movies = 0;
+    FILE * ifm = fopen("dataset/movies_100.csv","r");
+    if (ifm) {
+        cout << "Abriendo Archivo Movies" << endl;
+        cout << "Espere por favor" << endl;
+        char header[100]; 
+        fscanf(ifm,"%s", header);
+        //cout << header << endl; 
+        //cout << fscanf(ifm, "%d,%[^,],%[^\n]", &idmovie, title, category) << endl;
+        // cout << endl;
+        // cout << idmovie << endl;
+        // cout << title  << endl; 
+        // cout << category << endl;
+
+
+
+        while ( fscanf(ifm, "%d,%[^,],%[^\n]", &idmovie, title, category)  >= 3) {
+            auto movie = g.findItem(idmovie);
+            if(movie){
+                movie->nombre = string(title);
+                //cout << movie->nombre << endl; 
+            }
+            
+            rows_movies++;
+        }
+        fclose(ifm);
+        cout << "Se cargaron " << rows_movies << "filas"<<endl;
+    }
+    else{
+    cout << "ERROR no se abrio el archivo" << endl;
+    }
+    auto fin_movies = chrono::steady_clock::now();
+    cout <<"Archivo Movies Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    //_______ FIN ARCHIVO ___ 
 
 
     //Start Server

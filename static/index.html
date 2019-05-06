@@ -77,6 +77,9 @@
               </div>
         
               <div class="container" >
+                <div class="progress" v-if="datos_knn.loading">
+                    <div class="indeterminate"></div>
+                </div>
                 <div v-if="datos_knn">
                   Resuelto en : {{datos_knn.time}} milisegundos
                   <div v-if="datos_knn.error">
@@ -117,8 +120,8 @@
                           <tbody>
                             <tr v-for="item in datos_knn.recomendacion">
                             <td>{{item.idItem}}</td>
-                        <td>-</td>
-                        <td>{{item.rating}}</td>
+                            <td>{{item.nombre}}</td>
+                            <td>{{item.rating}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -178,13 +181,21 @@
             </div>
             
             <div class="container">
+              
+                <div class="progress" v-if="datos_item.loading">
+                    <div class="indeterminate"></div>
+                </div>
+
               <div v-if="datos_item">
                 Resuelto en : {{datos_item.time}} milisegundos
                 
                 <h5>Rating calculado: {{datos_item.rating}}</h5>
                 <div v-if="datos_item.error">
-              {{datos_knn.error}}
-            </div>
+                {{datos_knn.error}}
+                </div>
+
+                 
+
             <div v-else>
               <div class="row">
                 <div class="col s12">
@@ -241,6 +252,7 @@
       //var formu = form.;
       //console.log(form.k.value);
       app.datos_knn = false;
+      app.datos_knn.loading = true;
       
       fetch('http://localhost:9081/knn', {
         method: 'post',
@@ -251,6 +263,7 @@
         //Success code goes here
         //alert('form submited')
         app.datos_knn = data; 
+        app.datos_knn.loading = false;
         console.log(data);
       }).catch(function(err) {
         //Failure
@@ -265,6 +278,7 @@
       //var formu = form.;
       console.log(form.k.value);
       app.datos_item = false;
+      app.datos_item.loading = true;
       fetch('http://localhost:9081/item', {
         method: 'post',
         body: JSON.stringify({iduser: Number(form.iduser.value), item:Number(form.iditem.value), distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
@@ -274,6 +288,7 @@
         //Success code goes here
         //alert('form submited')
         app.datos_item = data; 
+        app.datos_knn.loading = false;
         console.log(data);
       }).catch(function(err) {
         //Failure

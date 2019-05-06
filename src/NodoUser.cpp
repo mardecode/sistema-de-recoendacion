@@ -135,9 +135,12 @@ void NodoUser::knn_restricto(int k, int dist, NodoItem  * & item_b , list< pair<
 }
 
 // ─── RECOMENDACION ──────────────────────────────────────────────────────────────
-void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec,float &umbral){ //K Vecinos mas Cercanos KVC
-    
-    // cout<<"RECOMENDACION"<<endl; 
+void NodoUser::recomendacion(k_vec &kvc,map<NodoItem*,pair<float,int> > &  rec){ //K Vecinos mas Cercanos KVC
+    // id movie, puntaje promedio
+    // id_item,<ratign,numero>
+
+
+    cout<<"RECOMENDACION"<<endl; 
     for(auto & usr: kvc){
         float mayor = 0;
         NodoItem * p_item;
@@ -156,13 +159,13 @@ void NodoUser::recomendacion(k_vec &kvc,map<int,pair<float,int> > &  rec,float &
             // antigua implementacion
             // recomendacion.push_back(make_pair(p_item->id,mayor));
             // nueva implementacion
-            auto it = rec.find(p_item->id);
+            auto it = rec.find(p_item);
             if(it!= rec.end()){
                     it->second.first += mayor;
                     it->second.second += 1; 
             }
             else{
-                rec[p_item->id] = make_pair(mayor,1);
+                rec[p_item] = make_pair(mayor,1);
             }
         }
     }
