@@ -185,10 +185,13 @@ struct HelloHandler : public Http::Handler {
 int main(){
     int iduser, idbook, timestamp ;
     float rating;
-
+    auto start = chrono::steady_clock::now();
     //138493 users
     //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
-     FILE * ifs = fopen("dataset/ml-latest-small/ratings.csv","r");
+    FILE * ifs = fopen("dataset/ml-latest-small/ratings.csv","r");
+
+    //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
+    //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
 
     //600 aprox users
     int rows = 0;
@@ -216,6 +219,8 @@ int main(){
     else{
     cout << "ERROR no se abrio el archivo" << endl;
     }
+    auto fin = chrono::steady_clock::now();
+    cout <<"Archivo Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<" milisegundos" <<endl;
     // ─── FIN LECTURA DEL ARCHIVO CSV ────────────────────────────────────────────────
 
 

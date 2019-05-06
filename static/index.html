@@ -38,15 +38,21 @@
             <div class="row" style="padding-top:30px">
                 <form class="col" onsubmit="submitForm(event, this)">
                     <div class="row">
+                      
                       <div class="input-field col l2">
                         <input placeholder="Id user" id="first_name" name="iduser" class="validate" type="number" required>
                         <label for="first_name">ID User</label>
                       </div>
+
+                      <div class="input-field col l1">
+                          <input placeholder="Umbral" id="first_name" name="umbral" class="validate" type="number" required>
+                          <label for="first_name">Umbral</label>
+                        </div>
                       
                       <div class="input-field col l3">
                         <select name="distancia" required>
-                          <option value="" disabled selected>Elija la distancia: </option>
-                          <option value="1">Manhattam</option>
+                          <option value="" disabledd>Elija la distancia: </option>
+                          <option value="1" selected>Manhattam</option>
                           <option value="2">Euclidiana</option>
                           <option value="3">Pearson</option>
                           <option value="4">Soft Coseno</option>
@@ -54,9 +60,9 @@
                         <label>Seleccione distancia</label>
                       </div>
                       
-                      <div class="input-field col l2">
+                      <div class="input-field col l1">
                         <input placeholder="k" id="first_name"  class="validate" type="number" name="k" required>
-                        <label for="first_name">Num Vecinos</label>
+                        <label for="first_name">NVecinos</label>
                       </div>
                       
                       <div class="input-field col l5">
@@ -233,11 +239,12 @@
     function submitForm(e, form){
       e.preventDefault();
       //var formu = form.;
-      console.log(form.k.value);
+      //console.log(form.k.value);
+      app.datos_knn = false;
       
       fetch('http://localhost:9081/knn', {
         method: 'post',
-        body: JSON.stringify({iduser: Number(form.iduser.value), distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
+        body: JSON.stringify({iduser: Number(form.iduser.value), umbral:(form.umbral.value) , distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
       }).then(function(response) {
         return response.json();
       }).then(function(data) {
@@ -257,7 +264,7 @@
       e.preventDefault();
       //var formu = form.;
       console.log(form.k.value);
-      
+      app.datos_item = false;
       fetch('http://localhost:9081/item', {
         method: 'post',
         body: JSON.stringify({iduser: Number(form.iduser.value), item:Number(form.iditem.value), distancia: Number(form.distancia.value) ,k:Number(form.k.value)})
