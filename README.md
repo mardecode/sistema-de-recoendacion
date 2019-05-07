@@ -87,6 +87,7 @@ make run
 
 Abrir en el navegador: "http://localhost:8091"
 
+![Estructura Grafo](/images/captura.png)
 
 ## Formato CSV
 ```
