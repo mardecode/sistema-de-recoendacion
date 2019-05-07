@@ -4,7 +4,6 @@
 #include <set>
 #include "math.h"
 #include <utility> 
-#include <vector>
 #include <list> 
 
 #include "NodoItem.hpp"
