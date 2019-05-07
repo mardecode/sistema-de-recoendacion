@@ -185,7 +185,7 @@ int main(){
     auto start = chrono::steady_clock::now();
     //138493 users
     //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
-    FILE * ifs = fopen("dataset/ratings20.csv","r");
+    FILE * ifs = fopen("dataset/ratings27.csv","r");
 
     //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
     //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
@@ -228,7 +228,7 @@ int main(){
     char title[200];
     char category[200];
     int rows_movies = 0;
-    FILE * ifm = fopen("dataset/movies20.csv","r");
+    FILE * ifm = fopen("dataset/movies27.csv","r");
     if (ifm) {
         cout << "Abriendo Archivo Movies" << endl;
         cout << "Espere por favor" << endl;
