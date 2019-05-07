@@ -17,12 +17,14 @@ public:
 ```
 Así cada nodo es indexado usando su *id*.
 
+![Estructura Grafo](/images/grafo.png)
+
 Además cada NodoUser y NodoItem tiene la forma:
 ```c++
 class  NodoUser{
   public:
     int id ;
-     //puntero a nodo item, float rating
+    //puntero a nodo item, float rating
     map<NodoItem * ,float>   items; //Relaciones 
     NodoUser(int id);
 ```
@@ -33,7 +35,6 @@ class  NodoItem {
       int id;
       string nombre;
       map<NodoUser *,float >  users;
-
       NodoItem(int);
 ```
 ### KNN
@@ -61,7 +62,7 @@ void NodoUser::knn(int k,int dist, k_vec &k_vecinos_cercanos){
 
 Una vez obtenidos los usarios en común que cumplen: "(usuarioPorElQueSePregunta)-[rating1]->(Movie x)<-[rating2]-(Usuario)" (Syntaxis Cypher-Neo4j ) se pueden hallar las distancias:
 
-```
+```c++
 multimap<float , NodoUser* > usersOrdenados; //Ordena los vecinos de acuerdo a la menor distancia
 manhattan(common_users,usersOrdenados);
 k_vecinos(usersOrdenados,k,k_vecinos_cercanos);
