@@ -9,20 +9,11 @@ Grafo::~Grafo() {
 }
 
 NodoItem *  Grafo::findItem (int id){
-    auto it = this->index_items.find(id);
-    if (it!= index_items.end() )
-        return it->second;
-    else
-        return 0;
+    return  this->index_items.at(id) ;
 }
 
 NodoUser * Grafo::findUser (int id){
-    auto it = this->index_users.find(id);
-    if (it!= index_users.end() ) 
-        return it->second;
-    else{
-        return 0;
-    }
+    return  this->index_users.at(id) ;
 }
 
 NodoUser * Grafo::addUser(int id){
@@ -31,7 +22,7 @@ NodoUser * Grafo::addUser(int id){
         return user;
     else{
         user = new NodoUser(id);
-        this->index_users[id] = user;
+        this->index_users.at(id) = user;
         return user;
     }
 }
@@ -42,7 +33,7 @@ NodoItem * Grafo::addItem(int id){
         return item;
     else{
         item = new NodoItem(id);
-        this->index_items[id] = item;
+        this->index_items.at(id) = item;
         return item;
     }
 }

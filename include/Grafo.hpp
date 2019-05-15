@@ -1,17 +1,25 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include "NodoItem.hpp"
 #include "NodoUser.hpp"
 
 class Grafo {
 
 public:
-    Grafo();
     ~Grafo();
 
-    map<int,NodoUser *> index_users;
-    map<int, NodoItem*>   index_items;
+    int max = 300000;
+
+    vector<NodoUser *> index_users;
+    vector<NodoItem *> index_items;
+    
+    Grafo() : index_users(max,0) ,   index_items(max,0) {
+    }
+
+    //map<int,NodoUser *> index_users;
+    //map<int, NodoItem*>   index_items;
 
 
     NodoUser * findUser(int);

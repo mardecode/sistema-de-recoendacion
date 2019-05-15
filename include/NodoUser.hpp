@@ -8,9 +8,7 @@
 
 #include "NodoItem.hpp"
 
-
 using  namespace std;
-
 
 class NodoItem;
 class NodoUser;
@@ -31,6 +29,6 @@ class  NodoUser{
     void recomendacion(list< pair<float,NodoUser* > > &, map<NodoItem*,pair<float,int> > &,float &umbral);
 
     void knn_restricto(int k, int dist, NodoItem  * & , list< pair<float,NodoUser* > > & );
-    float get_influencias(list< pair<float,NodoUser* > > & k_vecinos_cercanos,NodoItem * , k_vec_rest & );
+   float get_influencias(list< pair<float,NodoUser* > > & k_vecinos_cercanos,NodoItem * , k_vec_rest & );
 
 };
