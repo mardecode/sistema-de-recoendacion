@@ -1,8 +1,5 @@
 #include "Grafo.hpp"
 
-Grafo::Grafo() {
-
-}
 
 Grafo::~Grafo() {
 
@@ -23,6 +20,7 @@ NodoUser * Grafo::addUser(int id){
     else{
         user = new NodoUser(id);
         this->index_users.at(id) = user;
+        this->size_users ++;
         return user;
     }
 }
@@ -34,6 +32,7 @@ NodoItem * Grafo::addItem(int id){
     else{
         item = new NodoItem(id);
         this->index_items.at(id) = item;
+        this->size_items ++;
         return item;
     }
 }

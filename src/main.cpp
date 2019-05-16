@@ -217,6 +217,7 @@ int main(){
     else{
     cout << "ERROR no se abrio el archivo" << endl;
     }
+    cout <<" Numero total de items insertados:  " << g.size_items << endl;
     auto fin = chrono::steady_clock::now();
     cout <<"Archivo Ratings Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<" milisegundos" <<endl;
     // ─── FIN LECTURA DEL ARCHIVO CSV ────────────────────────────────────────────────

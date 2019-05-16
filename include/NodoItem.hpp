@@ -16,6 +16,7 @@ class  NodoItem {
     public:
       int id;
       string nombre;
+      
       map<NodoUser *,float >  users;
 
       NodoItem(int);

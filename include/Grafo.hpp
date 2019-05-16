@@ -14,6 +14,9 @@ public:
 
     vector<NodoUser *> index_users;
     vector<NodoItem *> index_items;
+
+    int size_items = 0;
+    int size_users = 0;
     
     Grafo() : index_users(max,0) ,   index_items(max,0) {
     }
