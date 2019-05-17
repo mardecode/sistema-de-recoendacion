@@ -23,8 +23,8 @@ class Grafo {
 public:
     ~Grafo();
 
-    int max_users = 300000;
-    int max_items = 200000;
+    int max_users = 4;
+    int max_items = 3;
 
     v_nodos_users index_users;
     v_nodos_items index_items;
@@ -41,6 +41,7 @@ public:
 
     rating_type calcDeriv(int i1 ,int i2 );
 
-    void calcFila(int i);
+    void calcFila_slope(int i, vector<rating_type> & ratings_sumas , vector<int> & ratings_sumas_cont );
+    rating_type predecir_slope(int u,int i);
 
 };

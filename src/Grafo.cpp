@@ -34,23 +34,29 @@ rating_type Grafo::calcDeriv(int i1, int i2 ){
     return sumatoria/cont;
 }
 
-void Grafo::calcFila(int i){
-    vector<rating_type> ratings_sumas(max_items,0);
-    vector<int> ratings_sumas_cont(max_items,-1);
+void Grafo::calcFila_slope(int i, vector<rating_type> & ratings_sumas , vector<int> & ratings_sumas_cont ){
+    //vector<rating_type> ratings_sumas(max_items,0);
+    //vector<int> ratings_sumas_cont(max_items,-1);
 
-    auto & item1  = this->index_items.at(i).s;
-    for( auto &u : item1){
+    auto & lista_users  = this->index_items.at(i).s;
+    for( auto &u : lista_users){
         auto & lista_items = this->index_users.at(u.f);
         
+        //if (i != u.first){
+        //cout << "id_item:"<< i <<">>>" <<" id_user:"<< u.first <<  endl ;
         for (auto &ix : lista_items){
-            ratings_sumas.at(ix.f) += u.s - ix.s;
-            ratings_sumas_cont.at(ix.f) ++;
+            if( ix.f != i){
+                //cout << "ix.f ( item ): "<< ix.f << "   u.s c: " << u.s << " ix.s " << ix.s << endl;
+                ratings_sumas.at(ix.f) += ix.s - u.s     ;
+                ratings_sumas_cont.at(ix.f) ++;
+            }
         }
+        //}
     }
     
     //int n_hilos = 4;
     for (int i = 0; i < ratings_sumas.size() ; i+= 1)
-        ratings_sumas.at(i) /=  ratings_sumas_cont.at(i);
+        ratings_sumas.at(i) /=  - ratings_sumas_cont.at(i);
 
     
     // vector<thread> mishilos;
@@ -67,6 +73,40 @@ void Grafo::calcFila(int i){
 
     // for (int i=0; i<n_hilos; i++) mishilos.at(i).join();
     
-        
+}
+
+
+rating_type Grafo::predecir_slope(int u,int i){
+    vector<rating_type> ratings_sumas(max_items,0);
+    vector<int> ratings_sumas_cont(max_items,0);
+
+    this->calcFila_slope(i, ratings_sumas, ratings_sumas_cont);
     
+    // cout << endl;
+    // for( auto r :  ratings_sumas) cout  << r << "   " ; 
+    // cout << endl; 
+    for( auto r :  ratings_sumas_cont) cout  << r << "   " ; 
+    cout << endl; 
+
+    auto user = this->index_users.at(u);
+
+    rating_type numerador = 0;
+    for(auto & item_visto : user ){
+        // cout << "dev " <<ratings_sumas.at(item_visto.f) << "  ";
+        // cout << "u " << item_visto.s << " ";
+        // cout << "c " <<  ratings_sumas_cont.at(item_visto.f) << endl;
+        numerador+= (ratings_sumas.at(item_visto.f)  + item_visto.s)*ratings_sumas_cont.at(item_visto.f);
+    }
+
+    
+    int denominador = 0;
+    for(auto & ci : ratings_sumas_cont ){
+        if ( ci > 0)
+            denominador += ci ; 
+        // else if ( ci == 0)
+        //     cout << "Cero" << endl;
+    }
+    //cout << "num " << numerador << endl;
+    //cout << "den " << denominador << endl;
+    return numerador/denominador;
 }

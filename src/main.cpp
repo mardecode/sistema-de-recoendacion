@@ -187,7 +187,7 @@ int main(){
     auto start = chrono::steady_clock::now();
     //138493 users
     //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
-    FILE * ifs = fopen("dataset/ratings27.csv","r");
+    FILE * ifs = fopen("dataset/singers_ratings.csv","r");
 
     //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
     //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
@@ -216,63 +216,63 @@ int main(){
             rows++;
         }
         fclose(ifs);
-        cout << "Se cargaron " << rows << "filas"<<endl;
+        cout << "Se cargaron " << rows << " filas"<<endl;
     }
     else{
     cout << "ERROR no se abrio el archivo" << endl;
     }
-    cout <<" Numero total de items insertados:  " << g.size_items << endl;
-    cout <<" Numero total de users insertados:  " << g.size_users << endl;
+    cout <<"\t Numero total de items insertados:  " << g.size_items << endl;
+    cout <<"\t Numero total de users insertados:  " << g.size_users << endl;
     auto fin = chrono::steady_clock::now();
     cout <<"Archivo Ratings Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<" milisegundos" <<endl;
     // ─── FIN LECTURA DEL ARCHIVO CSV ────────────────────────────────────────────────
 
     // *****************************************************
     // ________________ INICIO LECTURA MOVIES  _____________
-    auto start_movies = chrono::steady_clock::now();
-    int idmovie;
-    char title[200];
-    char category[200];
-    int rows_movies = 0;
-    FILE * ifm = fopen("dataset/movies27.csv","r");
-    if (ifm) {
-        cout << "Abriendo Archivo Movies" << endl;
-        cout << "Espere por favor" << endl;
-        char header[100]; 
-        fscanf(ifm,"%s", header);
-        //cout << header << endl; 
-        //cout << fscanf(ifm, "%d,%[^,],%[^\n]", &idmovie, title, category) << endl;
-        // cout << endl;
-        // cout << idmovie << endl;
-        // cout << title  << endl; 
-        // cout << category << endl;
+    // auto start_movies = chrono::steady_clock::now();
+    // int idmovie;
+    // char title[200];
+    // char category[200];
+    // int rows_movies = 0;
+    // FILE * ifm = fopen("dataset/movies27.csv","r");
+    // if (ifm) {
+    //     cout << "Abriendo Archivo Movies" << endl;
+    //     cout << "Espere por favor" << endl;
+    //     char header[100]; 
+    //     fscanf(ifm,"%s", header);
+    //     //cout << header << endl; 
+    //     //cout << fscanf(ifm, "%d,%[^,],%[^\n]", &idmovie, title, category) << endl;
+    //     // cout << endl;
+    //     // cout << idmovie << endl;
+    //     // cout << title  << endl; 
+    //     // cout << category << endl;
 
 
 
-        while ( fscanf(ifm, "%d,%[^,],%[^\n]", &idmovie, title, category)  >= 3) {
-            auto movie = g.index_items.at(idmovie);
-            if(movie.s.size()>=1 ){
-                movie.f = string(title);
-                //cout << movie->nombre << endl; 
-            }
+    //     while ( fscanf(ifm, "%d,%[^,],%[^\n]", &idmovie, title, category)  >= 3) {
+    //         auto movie = g.index_items.at(idmovie);
+    //         if(movie.s.size()>=1 ){
+    //             movie.f = string(title);
+    //             //cout << movie->nombre << endl; 
+    //         }
             
-            rows_movies++;
-        }
-        fclose(ifm);
-        cout << "Se cargaron " << rows_movies << "filas"<<endl;
-    }
-    else{
-    cout << "ERROR no se abrio el archivo" << endl;
-    }
-    auto fin_movies = chrono::steady_clock::now();
-    cout <<"Archivo Movies Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    //         rows_movies++;
+    //     }
+    //     fclose(ifm);
+    //     cout << "Se cargaron " << rows_movies << "filas"<<endl;
+    // }
+    // else{
+    // cout << "ERROR no se abrio el archivo" << endl;
+    // }
+    // auto fin_movies = chrono::steady_clock::now();
+    // cout <<"Archivo Movies Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
     
     //_______ FIN ARCHIVO ___ 
     
-    start_movies = chrono::steady_clock::now();
-    g.calcFila(307);
-    fin_movies = chrono::steady_clock::now();
-    cout <<"find derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    auto start_movies = chrono::steady_clock::now();
+    cout << "RESP: " << g.predecir_slope(1,2) << endl;
+    auto fin_movies = chrono::steady_clock::now();
+    cout <<"\n Fin derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
     
     // //Start Server
     // Http::listenAndServe<HelloHandler>("*:9081");
