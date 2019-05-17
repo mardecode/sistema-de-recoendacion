@@ -221,7 +221,8 @@ int main(){
     else{
     cout << "ERROR no se abrio el archivo" << endl;
     }
-    //cout <<" Numero total de items insertados:  " << g.size_items << endl;
+    cout <<" Numero total de items insertados:  " << g.size_items << endl;
+    cout <<" Numero total de users insertados:  " << g.size_users << endl;
     auto fin = chrono::steady_clock::now();
     cout <<"Archivo Ratings Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<" milisegundos" <<endl;
     // ─── FIN LECTURA DEL ARCHIVO CSV ────────────────────────────────────────────────
@@ -265,9 +266,14 @@ int main(){
     }
     auto fin_movies = chrono::steady_clock::now();
     cout <<"Archivo Movies Cargado en: " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    
     //_______ FIN ARCHIVO ___ 
-
-
+    
+    start_movies = chrono::steady_clock::now();
+    g.calcFila(307);
+    fin_movies = chrono::steady_clock::now();
+    cout <<"find derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    
     // //Start Server
     // Http::listenAndServe<HelloHandler>("*:9081");
 

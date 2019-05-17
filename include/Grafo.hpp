@@ -3,11 +3,14 @@
 #define f first
 #define s second
 #define rating_type float
-
+#include <iostream>
 #include <utility>
 #include <list>
+#include <set>
 #include <vector>
 #include <string>
+#include <map> 
+#include <thread>
 using namespace std;
 
 typedef list<pair<int,rating_type>> nodo;
@@ -20,7 +23,8 @@ class Grafo {
 public:
     ~Grafo();
 
-    int max = 300000;
+    int max_users = 300000;
+    int max_items = 200000;
 
     v_nodos_users index_users;
     v_nodos_items index_items;
@@ -29,9 +33,14 @@ public:
     int size_users = 0;
     
     
-    Grafo() : index_users(max,nodo()) ,   index_items(max, make_pair("",nodo())) {
+    Grafo() : index_users(max_users,nodo()) ,   index_items(max_items, make_pair("",nodo())) {
 
     }
 
     void addRelacion(int id_user, int id_item, rating_type  rtg );
+
+    rating_type calcDeriv(int i1 ,int i2 );
+
+    void calcFila(int i);
+
 };
