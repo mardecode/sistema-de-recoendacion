@@ -10,6 +10,9 @@ void Grafo::addRelacion(int id_user, int id_item, rating_type  rtg ){
 
     this->index_users.at(id_user).push_back( make_pair(id_item,rtg));
     this->index_items.at(id_item).s.push_back(make_pair(id_user,rtg));
+
+    this->usrs_average.at(id_user).f += rtg;
+    this->usrs_average.at(id_user).s ++;
 }
 
 
@@ -53,23 +56,44 @@ void Grafo::calcFila_slope(int i, vector<rating_type> & ratings_sumas , vector<i
         }
         //}
     }
-    
-    //int n_hilos = 4;
     for (int i = 0; i < ratings_sumas.size() ; i+= 1)
-        ratings_sumas.at(i) /=  - ratings_sumas_cont.at(i);
+        ratings_sumas.at(i) /=  ratings_sumas_cont.at(i);    
+}
 
+
+// ─── COSENO AJUSTADO ────────────────────────────────────────────────────────────
+void Grafo::cosenoAjustado( int id_item, vector<rating_type> & up){
+    // vector<rating_type> up (this->max_items,0);
+    vector<rating_type> down_a(this->max_items,0);
+    vector<rating_type> down_b(this->max_items,0);
+
+    auto & item_usrs = this->index_items.at(id_item).s;
+
+    for (auto & user: item_usrs){
+        auto & list_items = this->index_users.at(user.f);
+        auto average = this->usrs_average.at(user.f);
+        auto avr_real = average.f/average.s;
+        for(auto & item: list_items){
+            if(item.f != id_item){
+                
+                up.at(item.f) += (user.s - avr_real) * (item.s-avr_real);
+                down_a.at(item.f) += (user.s - avr_real)*(user.s - avr_real);
+                down_b.at(item.f) += (item.s - avr_real)*(item.s - avr_real);
+            }
+        }
+
+    }
+
+    for(int i = 0 ;i<this->max_items;i++){
+    up.at(i) = up.at(i) /(sqrt(down_a.at(i))*sqrt(down_b.at(i)));
+    // cout<<"Final *****" << up.at(i)<<endl;
+    }
+
+}
+
+void Grafo::recomendacionCoseno(int id_user,int id_item){
+// vector<rating_type> up (this->max_items,0);
     
-    // vector<thread> mishilos;
-    // for (int i = 0; i < n_hilos; i++){
-    //     int id_h = i;
-    //     //cout << i << endl;
-    //     mishilos.push_back( thread([&ratings_sumas, &ratings_sumas_cont , &id_h, &n_hilos] {
-    //         for (int i = id_h; i < ratings_sumas.size() ; i+= n_hilos){
-    //             //cout << "i " <<  i << endl;
-    //             ratings_sumas.at(i) /=  ratings_sumas_cont.at(i);
-    //         }
-    //     }));  
-    // }
 
     // for (int i=0; i<n_hilos; i++) mishilos.at(i).join();
     

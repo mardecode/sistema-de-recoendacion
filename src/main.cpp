@@ -270,6 +270,17 @@ int main(){
     //_______ FIN ARCHIVO ___ 
     
     auto start_movies = chrono::steady_clock::now();
+    
+
+    // AQUI PROBAR COSAS 
+    vector<rating_type> up (g.max_items,0);
+    g.cosenoAjustado(1,up);
+
+    auto fin_movies = chrono::steady_clock::now();
+
+
+    cout <<"find derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    auto start_movies = chrono::steady_clock::now();
     cout << "RESP: " << g.predecir_slope(1,2) << endl;
     auto fin_movies = chrono::steady_clock::now();
     cout <<"\n Fin derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
