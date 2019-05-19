@@ -95,7 +95,9 @@ rating_type Grafo::pearson(int u1, int u2,vector<list<pair<rating_type,rating_ty
     }
     rating_type denominador =  ( sqrt(xx - (xi*xi)/n ) * sqrt( yy - (yi*yi)/n ) );  
     if(denominador==0) return 0;
-    return (xy-(xi*yi)/n ) /  denominador ;
+    rating_type resp =  (xy-(xi*yi)/n ) /  denominador ;
+    if(resp >= 1 ) return 1;
+    return resp;
 
 }
 

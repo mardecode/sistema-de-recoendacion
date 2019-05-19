@@ -306,7 +306,7 @@ int main(){
 // ───  KNN ──────────────────────────────────────────────────────────────────
 for(int i = 0;i<1;i++){
 
-    int user = 16006;//283228;//rand()%10000;
+    int user = 4598;//283228;//rand()%10000;
     auto & u = g.index_users.at(user); //prueba
     
     auto start = chrono::steady_clock::now();
