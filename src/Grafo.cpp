@@ -18,7 +18,7 @@ void Grafo::addRelacion(int id_user, int id_item, rating_type  rtg ){
     this->usrs_squares.at(id_user) += rtg*rtg;
 }
 
-void Grafo::knn(int u1, multimap<rating_type,int>&knn){
+void Grafo::knn(int u1, multimap<rating_type,int,greater <rating_type>>&knn){
     auto & user1 = this->index_users.at(u1) ;
     vector<list<pair<rating_type,rating_type>>> common_users(this->max_users,list<pair<rating_type,rating_type>>());
 
@@ -33,7 +33,7 @@ void Grafo::knn(int u1, multimap<rating_type,int>&knn){
     //Calcular coseno contra ellos
     for (int i = 0; i < this->max_users; i++){
         if( !common_users.at(i).empty() && i!=u1 ){
-            knn.insert(make_pair(this->euclidiana(u1, i,common_users) ,i));
+            knn.insert(make_pair(this->pearson(u1, i,common_users) ,i));
         }
     }
 
@@ -43,7 +43,7 @@ void Grafo::knn(int u1, multimap<rating_type,int>&knn){
 rating_type Grafo::coseno(int u1, int u2,vector<list<pair<rating_type,rating_type>>> & common_users){
     //cout << "calculando cos"<<u1<<" "<<u2<< endl;
     
-    auto list_distancias = common_users.at(u2);
+    auto & list_distancias = common_users.at(u2);
 
     rating_type xx = this->usrs_squares.at(u1);
     rating_type yy = this->usrs_squares.at(u2);
@@ -58,7 +58,7 @@ rating_type Grafo::coseno(int u1, int u2,vector<list<pair<rating_type,rating_typ
 }
 
 rating_type Grafo::euclidiana(int u1, int u2, vector<list<pair<rating_type,rating_type>>> & common_users){
-    auto list_distancias = common_users.at(u2);
+    auto & list_distancias = common_users.at(u2);
 
     rating_type xy = 0;
     for(auto & distancia : list_distancias){
@@ -67,6 +67,38 @@ rating_type Grafo::euclidiana(int u1, int u2, vector<list<pair<rating_type,ratin
 
     return sqrt(xy);
 }
+
+
+rating_type Grafo::pearson(int u1, int u2,vector<list<pair<rating_type,rating_type>>> & common_users){
+    //cout << "calculando cos"<<u1<<" "<<u2<< endl;
+    
+    auto & list_distancias = common_users.at(u2);
+
+    rating_type xi = 0;
+    rating_type yi = 0;
+
+    rating_type xx = 0;
+    rating_type yy = 0;
+    
+    rating_type xsums = 0;
+    rating_type ysums = 0;
+    
+    int n = list_distancias.size();
+
+    rating_type xy = 0;
+    for(auto & distancia : list_distancias){
+        xy+= distancia.f * distancia.s;
+        xi+= distancia.f;
+        yi+= distancia.s;
+        xx+= distancia.f*distancia.f;
+        yy+= distancia.s*distancia.s;
+    }
+    rating_type denominador =  ( sqrt(xx - (xi*xi)/n ) * sqrt( yy - (yi*yi)/n ) );  
+    if(denominador==0) return 0;
+    return (xy-(xi*yi)/n ) /  denominador ;
+
+}
+
 
 // ____________ SLOPE ONE _____
 void Grafo::calcFila_slope(int i, vector<rating_type> & ratings_sumas , vector<int> & ratings_sumas_cont ){

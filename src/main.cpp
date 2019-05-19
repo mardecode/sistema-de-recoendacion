@@ -306,11 +306,11 @@ int main(){
 // ───  KNN ──────────────────────────────────────────────────────────────────
 for(int i = 0;i<1;i++){
 
-    int user = 30503;//283228;//rand()%10000;
+    int user = 16006;//283228;//rand()%10000;
     auto & u = g.index_users.at(user); //prueba
     
     auto start = chrono::steady_clock::now();
-    multimap<float,int>  knn;//
+    multimap<float,int,greater <rating_type>>  knn;//
     cout<<user<<" user random \n";
     if(!u.empty()) {
       g.knn(user,knn);
@@ -321,7 +321,7 @@ for(int i = 0;i<1;i++){
     cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<< "milisegundos" <<endl;
 
     auto it = knn.begin();
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 10; i++)
     {
         cout << it->first << " " << it->second << endl;
         it++;

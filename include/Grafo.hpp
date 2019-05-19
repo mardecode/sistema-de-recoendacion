@@ -51,10 +51,10 @@ public:
         KNN
     */
 
-   void knn(int u1, multimap<rating_type,int>&knn);
+   void knn(int u1, multimap<rating_type,int,greater <rating_type>>&knn);
    rating_type coseno(int u1, int u2, vector<list<pair<rating_type,rating_type>>> & common_users);
    rating_type euclidiana(int u1, int u2, vector<list<pair<rating_type,rating_type>>> & common_users);
-
+   rating_type pearson(int u1, int u2,vector<list<pair<rating_type,rating_type>>> & common_users);
 
 
 
