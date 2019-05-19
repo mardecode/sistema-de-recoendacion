@@ -3,6 +3,7 @@
 Grafo::~Grafo() {
 }
 
+
 void Grafo::addRelacion(int id_user, int id_item, rating_type  rtg ){
 
     if(this->index_items.at(id_item).s.size() == 0) this->size_items++;
@@ -13,30 +14,61 @@ void Grafo::addRelacion(int id_user, int id_item, rating_type  rtg ){
 
     this->usrs_average.at(id_user).f += rtg;
     this->usrs_average.at(id_user).s ++;
+
+    this->usrs_squares.at(id_user) += rtg*rtg;
 }
 
+void Grafo::knn(int u1, multimap<rating_type,int>&knn){
+    auto & user1 = this->index_users.at(u1) ;
+    vector<list<pair<rating_type,rating_type>>> common_users(this->max_users,list<pair<rating_type,rating_type>>());
 
-rating_type Grafo::calcDeriv(int i1, int i2 ){
-
-    auto item1 = this->index_items.at(i1).s;
-    auto item2 = this->index_items.at(i2).s;
-    int cont = 0;
-    rating_type sumatoria = 0;
-    map<int,rating_type> map_der;
-    for(auto &it:item1){ //recorriendo item1
-        map_der[it.f] = it.s;       
-    }
-
-    for(auto &it:item2){ //recorriendo item 2
-        auto existe = map_der.find(it.f);
-        if(existe != map_der.end()){
-            cont ++;
-            sumatoria += existe->s - it.s;
+    //Hallar usuarios en comun
+    for(auto &item : user1){
+        auto & l_users = this->index_items.at(item.f).s;
+        for ( auto & user_c : l_users){
+            //usuarios[ user_c.int   ]  ->  () , () , () ... 
+            common_users.at(user_c.f).push_back(make_pair( item.s , user_c.second));
         }
     }
-    return sumatoria/cont;
+    //Calcular coseno contra ellos
+    for (int i = 0; i < this->max_users; i++){
+        if( !common_users.at(i).empty() && i!=u1 ){
+            knn.insert(make_pair(this->euclidiana(u1, i,common_users) ,i));
+        }
+    }
+
 }
 
+
+rating_type Grafo::coseno(int u1, int u2,vector<list<pair<rating_type,rating_type>>> & common_users){
+    //cout << "calculando cos"<<u1<<" "<<u2<< endl;
+    
+    auto list_distancias = common_users.at(u2);
+
+    rating_type xx = this->usrs_squares.at(u1);
+    rating_type yy = this->usrs_squares.at(u2);
+
+    rating_type xy = 0;
+    for(auto & distancia : list_distancias){
+        xy+= distancia.f * distancia.s;
+    }
+
+    return xy/(sqrt(xx)*sqrt(yy));
+
+}
+
+rating_type Grafo::euclidiana(int u1, int u2, vector<list<pair<rating_type,rating_type>>> & common_users){
+    auto list_distancias = common_users.at(u2);
+
+    rating_type xy = 0;
+    for(auto & distancia : list_distancias){
+        xy+= (distancia.f - distancia.s) * (distancia.f - distancia.s);
+    }
+
+    return sqrt(xy);
+}
+
+// ____________ SLOPE ONE _____
 void Grafo::calcFila_slope(int i, vector<rating_type> & ratings_sumas , vector<int> & ratings_sumas_cont ){
     //vector<rating_type> ratings_sumas(max_items,0);
     //vector<int> ratings_sumas_cont(max_items,-1);
@@ -59,6 +91,43 @@ void Grafo::calcFila_slope(int i, vector<rating_type> & ratings_sumas , vector<i
     for (int i = 0; i < ratings_sumas.size() ; i+= 1)
         ratings_sumas.at(i) /=  ratings_sumas_cont.at(i);    
 }
+
+
+rating_type Grafo::predecir_slope(int u,int i){
+    vector<rating_type> ratings_sumas(max_items,0);
+    vector<int> ratings_sumas_cont(max_items,0);
+
+    this->calcFila_slope(i, ratings_sumas, ratings_sumas_cont);
+    
+    // cout << endl;
+    // for( auto r :  ratings_sumas) cout  << r << "   " ; 
+    // cout << endl; 
+    // for( auto r :  ratings_sumas_cont) cout  << r << "   " ; 
+    // cout << endl; 
+
+    auto user = this->index_users.at(u);
+
+    rating_type numerador = 0;
+    for(auto & item_visto : user ){
+        // cout << "dev " <<ratings_sumas.at(item_visto.f) << "  ";
+        // cout << "u " << item_visto.s << " ";
+        // cout << "c " <<  ratings_sumas_cont.at(item_visto.f) << endl;
+        numerador+= (ratings_sumas.at(item_visto.f)  + item_visto.s)*ratings_sumas_cont.at(item_visto.f);
+    }
+
+    
+    int denominador = 0;
+    for(auto & ci : ratings_sumas_cont ){
+        if ( ci > 0)
+            denominador += ci ; 
+        // else if ( ci == 0)
+        //     cout << "Cero" << endl;
+    }
+    //cout << "num " << numerador << endl;
+    //cout << "den " << denominador << endl;
+    return numerador/denominador;
+}
+
 
 
 // ─── COSENO AJUSTADO ────────────────────────────────────────────────────────────
@@ -100,37 +169,3 @@ void Grafo::recomendacionCoseno(int id_user,int id_item){
 }
 
 
-rating_type Grafo::predecir_slope(int u,int i){
-    vector<rating_type> ratings_sumas(max_items,0);
-    vector<int> ratings_sumas_cont(max_items,0);
-
-    this->calcFila_slope(i, ratings_sumas, ratings_sumas_cont);
-    
-    // cout << endl;
-    // for( auto r :  ratings_sumas) cout  << r << "   " ; 
-    // cout << endl; 
-    for( auto r :  ratings_sumas_cont) cout  << r << "   " ; 
-    cout << endl; 
-
-    auto user = this->index_users.at(u);
-
-    rating_type numerador = 0;
-    for(auto & item_visto : user ){
-        // cout << "dev " <<ratings_sumas.at(item_visto.f) << "  ";
-        // cout << "u " << item_visto.s << " ";
-        // cout << "c " <<  ratings_sumas_cont.at(item_visto.f) << endl;
-        numerador+= (ratings_sumas.at(item_visto.f)  + item_visto.s)*ratings_sumas_cont.at(item_visto.f);
-    }
-
-    
-    int denominador = 0;
-    for(auto & ci : ratings_sumas_cont ){
-        if ( ci > 0)
-            denominador += ci ; 
-        // else if ( ci == 0)
-        //     cout << "Cero" << endl;
-    }
-    //cout << "num " << numerador << endl;
-    //cout << "den " << denominador << endl;
-    return numerador/denominador;
-}

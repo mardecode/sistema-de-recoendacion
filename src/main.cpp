@@ -185,32 +185,18 @@ int main(){
     int iduser, idbook, timestamp ;
     float rating;
     auto start = chrono::steady_clock::now();
-    //138493 users
-    //FILE * ifs = fopen("/home/margarcuae/Documentos/tbd/parcial1/sistema-de-recoendacion/dataset/bandas.csv","r");
-    FILE * ifs = fopen("dataset/singers_ratings.csv","r");
 
-    //FILE * ifs = fopen("dataset/ml-20m/ratings.csv","r");
-    //FILE * ifs = fopen("dataset/ratings.csv","r"); //27 m 
- 
-    //600 aprox users
+    FILE * ifs = fopen("dataset/ratings27.csv","r");
     int rows = 0;
 
     // ─── LECTURA DEL ARCHIVO ────────────────────────────────────────────────────────
     if (ifs) {
-        cout << "Abriendo archivo " << endl;
-        cout << "Espere con calma ... plis" << endl;
+        cout << "Abriendo archivo \n Espere con calma ... plis" << endl;
         char header[100]; 
         fscanf(ifs,"%s", header);
 
         // Lectura toma : 14 segs  // MEJORAR 
         while ( fscanf(ifs, "%d,%d,%f,%d", &iduser, &idbook, &rating, &timestamp) >= 4) {
-            //Inserción toma 16 segs aprox 
-            // auto user = g.addUser(iduser);
-            // auto item = g.addItem(idbook);
-            //Quiza se deba parallelizar , guardar to en un vector 
-            // dividir el vector en 4 , y soltar 4 threads , cada uno realiza las inserciones
-            // user->add_item(rating,item);  
-            // item->add_user(rating,user);  
 
             g.addRelacion(iduser,idbook,rating);
             rows++;
@@ -218,9 +204,9 @@ int main(){
         fclose(ifs);
         cout << "Se cargaron " << rows << " filas"<<endl;
     }
-    else{
-    cout << "ERROR no se abrio el archivo" << endl;
-    }
+    else
+        cout << "ERROR no se abrio el archivo" << endl;
+    
     cout <<"\t Numero total de items insertados:  " << g.size_items << endl;
     cout <<"\t Numero total de users insertados:  " << g.size_users << endl;
     auto fin = chrono::steady_clock::now();
@@ -269,45 +255,79 @@ int main(){
     
     //_______ FIN ARCHIVO ___ 
     
-    auto start_movies = chrono::steady_clock::now();
+    // FILE *f = fopen("file.txt", "w");
+    // if (f == NULL)
+    // {
+    //     printf("Error opening file!\n");
+    //     exit(1);
+    // }
+
+    // auto start_movies = chrono::steady_clock::now();
     
 
-    // AQUI PROBAR COSAS 
-    vector<rating_type> up (g.max_items,0);
-    g.cosenoAjustado(1,up);
+    // // AQUI PROBAR COSAS    
+    // // vector<rating_type> up (g.max_items,0);
+    // // g.cosenoAjustado(1,up);
 
-    auto fin_movies = chrono::steady_clock::now();
-
-
-    cout <<"find derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
-    auto start_movies = chrono::steady_clock::now();
-    cout << "RESP: " << g.predecir_slope(1,2) << endl;
-    auto fin_movies = chrono::steady_clock::now();
-    cout <<"\n Fin derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
     
+
+    // auto fin_movies = chrono::steady_clock::now();
+
+    // cout <<"find derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    // cout << "RESP: " << g.predecir_slope(1,2) << endl;
+    
+    // auto start_movies = chrono::steady_clock::now();
+    // //cout << "RESP: " << g.predecir_slope(1,2) << endl; //PREDECIR
+
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     vector<rating_type> ratings_sumas(300000,0);
+    //     vector<int> ratings_sumas_cont(300000,0);
+    //     g.calcFila_slope(2, ratings_sumas, ratings_sumas_cont);
+
+    //     for(auto & r : ratings_sumas){
+    //         fprintf(f, "%f,",r);
+    //     }
+    //     fprintf(f,"\n");
+    // }
+    
+
+    // auto fin_movies = chrono::steady_clock::now();
+    // cout <<"\n Fin derivacion " <<chrono::duration_cast<chrono::milliseconds>(fin_movies-start_movies).count()<<" milisegundos" <<endl;
+    
+    // fclose(f);
+
+
+
     // //Start Server
     // Http::listenAndServe<HelloHandler>("*:9081");
 
 
 // ───  KNN ──────────────────────────────────────────────────────────────────
-// for(int i = 0;i<3;i++){
-// }
+for(int i = 0;i<1;i++){
 
-    // auto start = chrono::steady_clock::now();
+    int user = 30503;//283228;//rand()%10000;
+    auto & u = g.index_users.at(user); //prueba
+    
+    auto start = chrono::steady_clock::now();
+    multimap<float,int>  knn;//
+    cout<<user<<" user random \n";
+    if(!u.empty()) {
+      g.knn(user,knn);
+    }
+    else cout << "no user" << endl;
 
-    // auto u = g.findUser(rand()%10000); //prueba
-    // k_vec k_vecinos_cercanos; //k vecinos
-    // list<pair<int ,float> > recomendacion;//
-    // cout<<u<<" user random \n";
-    // if(u) {
-    //   u->knn(10,3,k_vecinos_cercanos);
-    //   u->recomendacion(k_vecinos_cercanos,recomendacion);
-    //   }
-    // else cout << "no user" << endl;
+    auto fin = chrono::steady_clock::now();
+    cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<< "milisegundos" <<endl;
 
-    // auto fin = chrono::steady_clock::now();
-    // cout <<"KNN: " <<chrono::duration_cast<chrono::milliseconds>(fin-start).count()<<endl;
-
+    auto it = knn.begin();
+    for (int i = 0; i < 100; i++)
+    {
+        cout << it->first << " " << it->second << endl;
+        it++;
+    }
+    
+}
   
 
 
